@@ -1,0 +1,22 @@
+﻿<Application x:Class="IoTDeviceAppEX.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:IoTDeviceAppEX"
+             xmlns:viewModels="clr-namespace:IoTDeviceAppEX.MVVM.ViewModels"
+             xmlns:views="clr-namespace:IoTDeviceAppEX.MVVM.Views"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/FontDictionary.xaml" />
+                <ResourceDictionary Source="Resources/MenuDictionary.xaml" />
+                <ResourceDictionary Source="Resources/TileDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModels:ControlPanelViewModel}">
+                <views:ControlPanelView/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,34 @@
+﻿<Window x:Class="IoTDeviceAppEX.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IoTDeviceAppEX"
+        xmlns:viewmodels="clr-namespace:IoTDeviceAppEX.MVVM.ViewModels" 
+        xmlns:components="clr-namespace:IoTDeviceAppEX.Components"
+        mc:Ignorable="d"
+        Title="ControlApp" 
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent" 
+        Height="1024" 
+        Width="1024">
+    <Window.DataContext>
+        <viewmodels:MainViewModel />
+    </Window.DataContext>
+
+    <Border Background="#333333" CornerRadius="12">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <ContentControl Grid.Row="0" Content="{Binding CurrentView}" />
+            
+        </Grid>
+
+    </Border>
+
+</Window>
