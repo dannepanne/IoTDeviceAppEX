@@ -27,7 +27,6 @@ namespace Device.ScreenWriterEX
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private static readonly DeviceClient _deviceClient = DeviceClient.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
         public string _deviceName = "ScreenWriter";
         public string _screenWriterText { get; set; } = "";
         public string _deviceId = "ScreenWriter-9cea-9ca9b8cfe6b2";
