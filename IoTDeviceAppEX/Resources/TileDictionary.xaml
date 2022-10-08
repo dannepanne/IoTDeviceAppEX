@@ -69,7 +69,7 @@
 
     <Style x:Key="tilePanelIcon" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource FontAwesome-Regular}" />
-        <Setter Property="FontSize" Value="62" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="Margin" Value="0 0 0 10" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -89,7 +89,7 @@
         <Setter Property="Text" Value="{Binding ElementName=tile,Path=DeviceName}" />
         <Setter Property="Foreground" Value="GreenYellow" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontSize" Value="5" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
@@ -98,5 +98,6 @@
         <Setter Property="Foreground" Value="GreenYellow" />
         <Setter Property="FontSize" Value="11" />
         <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
 </ResourceDictionary>

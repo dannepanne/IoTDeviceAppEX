@@ -87,7 +87,7 @@ namespace Device.ScreenWriterEX
         {
             string randomString = "";
             Random randLenght = new Random();
-            int randInt = randLenght.Next(7, 70);
+            int randInt = randLenght.Next(40, 170);
             for (int i = 0; i < randInt; i++)
             {
                 randomString += GetChar();

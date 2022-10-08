@@ -47,6 +47,7 @@
             </ItemsControl>
             <ContentControl Grid.Row="0" Content="{Binding CurrentView}" />
             <components:MenuComponent Grid.Row="3" Grid.Column="4" Margin="150 0 0 0" HorizontalAlignment="left"/>
+            
         </Grid>
     </Border>
     

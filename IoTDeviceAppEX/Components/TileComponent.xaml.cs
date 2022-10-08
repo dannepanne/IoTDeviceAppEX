@@ -31,11 +31,11 @@ namespace IoTDeviceAppEX.Components
             set { SetValue(DeviceNameProperty, value); }
         }
 
-        public static readonly DependencyProperty DeviceTypeProperty = DependencyProperty.Register("DeviceText", typeof(string), typeof(TileComponent));
+        public static readonly DependencyProperty DeviceTextProperty = DependencyProperty.Register("DeviceText", typeof(string), typeof(TileComponent));
         public string DeviceText
         {
-            get { return (string)GetValue(DeviceTypeProperty); }
-            set { SetValue(DeviceTypeProperty, value); }
+            get { return (string)GetValue(DeviceTextProperty); }
+            set { SetValue(DeviceTextProperty, value); }
         }
 
 
