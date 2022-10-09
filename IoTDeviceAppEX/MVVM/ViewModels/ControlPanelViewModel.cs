@@ -33,7 +33,7 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
 
         private List<DeviceItem> _tempList;
         private readonly RegistryManager registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
-        
+
         
         private string? _onScreenText;
         public string? onScreenText
@@ -51,7 +51,7 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
             _tempList = new List<DeviceItem>();
             _deviceItems = new ObservableCollection<DeviceItem>();
             PopulateDeviceItemsAsync().ConfigureAwait(false);
-            SetInterval(TimeSpan.FromSeconds(3));
+            SetInterval(TimeSpan.FromSeconds(5));
         }
 
 
@@ -74,27 +74,28 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         {
             await PopulateDeviceItemsAsync();
             await UpdateDeviceItemsAsync();
-            await UpdateText();
+            //await UpdateText();
+            PopulateScreen();
 
         }
 
-        public async Task UpdateText()
-        {
-            var result = registryManager.CreateQuery("select * from devices WHERE properties.reported.deviceName = 'ScreenWriter'");
+        //public async Task UpdateText()
+        //{
+        //    var result = registryManager.CreateQuery("select * from devices WHERE properties.reported.deviceName = 'ScreenWriter'");
 
 
-            foreach (Twin twin in await result.GetNextAsTwinAsync())
-            {
-                try
-                {
-                    _deviceItems[0].DeviceText = twin.Properties.Reported["screenWriterText"];
-                }
-                catch { }
+        //    foreach (Twin twin in await result.GetNextAsTwinAsync())
+        //    {
+        //        try
+        //        {
+        //            _onScreenText = twin.Properties.Reported["screenWriterText"];
+        //        }
+        //        catch { }
              
-            }
+        //    }
 
-            onScreenText = _deviceItems[0].DeviceText;
-        }
+        //    _deviceItems[0].DeviceText = _onScreenText;
+        //}
 
 
         private async Task UpdateDeviceItemsAsync()
@@ -118,7 +119,8 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
 
         private async Task PopulateDeviceItemsAsync()
         {
-            var result = registryManager.CreateQuery("select * from devices WHERE properties.reported.deviceName = 'ScreenWriter'"); 
+            using var _registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
+            var result = _registryManager.CreateQuery("select * from devices WHERE properties.reported.deviceName = 'ScreenWriter'"); 
 
             if (result.HasMoreResults)
             {
@@ -151,8 +153,8 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
                     }
                     else 
                     {
-                        onScreenText = twin.Properties.Reported["screenWriterText"];
-                        device.DeviceText = onScreenText;
+                        //_onScreenText = twin.Properties.Reported["screenWriterText"];
+                        //device.DeviceText = onScreenText;
 
                     }
                 }
@@ -161,6 +163,25 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
             {
                 _deviceItems.Clear();
             }
+        }
+
+
+
+        private async void PopulateScreen()
+        {
+            var result = registryManager.CreateQuery(
+                    "SELECT * FROM Devices WHERE properties.reported.deviceName = 'ScreenWriter'");
+            
+            foreach (var twin in await result.GetNextAsTwinAsync())
+            {
+                try { onScreenText = twin.Properties.Reported["screenWriterText"]; }
+                catch { }
+
+            }
+
+            deviceItem[0].DeviceText = onScreenText;
+
+
         }
     }
 }
