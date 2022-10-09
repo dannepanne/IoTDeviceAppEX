@@ -17,15 +17,17 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         private DispatcherTimer timer;
         private ObservableCollection<DeviceItem> _deviceItems;
 
-        public ObservableCollection<DeviceItem> deviceItem
-        {
-            get => _deviceItems;
-            set 
-            { 
-                deviceItem = value;
-                OnPropertyChanged();
-            }
-        }
+        //public ObservableCollection<DeviceItem> deviceItem
+        //{
+        //    get => _deviceItems;
+        //    set 
+        //    { 
+        //        deviceItem = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
+
 
         //knapp ta bort device
 
@@ -35,16 +37,16 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         private readonly RegistryManager registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
 
         
-        private string? _onScreenText;
-        public string? onScreenText
-        {
-            get => _onScreenText; 
-            set 
-            { 
-                _onScreenText = value;
-                OnPropertyChanged();
-            }
-        }
+        //private string? _onScreenText;
+        //public string? onScreenText
+        //{
+        //    get => _onScreenText; 
+        //    set 
+        //    { 
+        //        _onScreenText = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         public ControlPanelViewModel()
         {
@@ -56,6 +58,19 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
 
 
         public IEnumerable<DeviceItem> DeviceItems => _deviceItems;
+
+
+        //private IEnumerable<DeviceItem> DeviceItems;
+
+        //public IEnumerable<DeviceItem> _DeviceItems
+        //{
+        //    get => _deviceItems;
+        //    set 
+        //    { 
+        //        DeviceItems = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
 
 
@@ -74,8 +89,7 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         {
             await PopulateDeviceItemsAsync();
             await UpdateDeviceItemsAsync();
-            //await UpdateText();
-            PopulateScreen();
+           
 
         }
 
@@ -99,12 +113,18 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
 
 
         private async Task UpdateDeviceItemsAsync()
-        {
+        {   
+
             _tempList.Clear();
 
             foreach (var item in _deviceItems)
             {
                 var device = await registryManager.GetDeviceAsync(item.DeviceId);
+                var twin = await registryManager.GetTwinAsync(item.DeviceId);
+
+                DeviceText = twin.Properties.Reported["screenWriterText"].ToString();
+
+
                 if (device == null)
                     _tempList.Add(item);
             }
@@ -153,8 +173,10 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
                     }
                     else 
                     {
-                        //_onScreenText = twin.Properties.Reported["screenWriterText"];
-                        //device.DeviceText = onScreenText;
+                        _deviceItems.Clear();
+                        _deviceItems.Add(device);
+                        device.DeviceText = twin.Properties.Reported["screenWriterText"];
+                        
 
                     }
                 }
@@ -167,21 +189,18 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
 
 
 
-        private async void PopulateScreen()
+
+        private string deviceText;
+
+        public string DeviceText
         {
-            var result = registryManager.CreateQuery(
-                    "SELECT * FROM Devices WHERE properties.reported.deviceName = 'ScreenWriter'");
-            
-            foreach (var twin in await result.GetNextAsTwinAsync())
+            get { return deviceText; }
+            set 
             {
-                try { onScreenText = twin.Properties.Reported["screenWriterText"]; }
-                catch { }
-
+                deviceText = value;
+                OnPropertyChanged(nameof(DeviceText));
             }
-
-            deviceItem[0].DeviceText = onScreenText;
-
-
         }
+
     }
 }

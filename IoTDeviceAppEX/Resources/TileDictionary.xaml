@@ -31,7 +31,24 @@
                 <Setter Property="Text" Value="{Binding ElementName=tile,Path=StateInActive}" />
             </DataTrigger>
         </Style.Triggers>
-    </Style>
+    </Style> 
+
+
+
+    <!--<Style x:Key="tilePanelDelete" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Button x:Name="btn_Remove" Background="Red" Height="25" Width="50" Content="&#xf54c;"/>
+                        
+                    </Grid>
+
+               </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
 
 
     <Style x:Key="tilePanelToggleButton" TargetType="ToggleButton">

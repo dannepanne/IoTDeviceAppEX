@@ -1,4 +1,7 @@
-﻿using System;
+﻿using IoTDeviceAppEX.MVVM.Models;
+using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +23,10 @@ namespace IoTDeviceAppEX.Components
     /// </summary>
     public partial class TileComponent : UserControl
     {
+
+
+
+       // private readonly RegistryManager _registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
         public TileComponent()
         {
             InitializeComponent();
@@ -35,7 +42,10 @@ namespace IoTDeviceAppEX.Components
         public string DeviceText
         {
             get { return (string)GetValue(DeviceTextProperty); }
-            set { SetValue(DeviceTextProperty, value); }
+            set 
+            { 
+                SetValue(DeviceTextProperty, value);
+            }
         }
 
 
@@ -56,20 +66,18 @@ namespace IoTDeviceAppEX.Components
             set { SetValue(IconInActiveProperty, value); }
         }
 
-        public static readonly DependencyProperty StateActiveProperty = DependencyProperty.Register("StateActive", typeof(string), typeof(TileComponent));
+        //private async void btnRemove_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var button = sender as Button;
+        //    var deviceItem = (DeviceItem)button.DataContext;
+        //    await _registryManager.RemoveDeviceAsync(deviceItem.DeviceId);
+        //}
 
-        public string StateActive
-        {
-            get { return (string)GetValue(StateActiveProperty); }
-            set { SetValue(StateActiveProperty, value); }
-        }
 
-        public static readonly DependencyProperty StateInActiveProperty = DependencyProperty.Register("StateInActive", typeof(string), typeof(TileComponent));
 
-        public string StateInActive
-        {
-            get { return (string)GetValue(StateInActiveProperty); }
-            set { SetValue(StateInActiveProperty, value); }
-        }
+
+
+
+        
     }
 }

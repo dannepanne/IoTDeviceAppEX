@@ -38,8 +38,7 @@
 
                             IconActive="{Binding IconActive}"
                             IconInActive="{Binding IconInActive}"
-                            StateActive="{Binding StateActive}"
-                            StateInActive="{Binding StateInActive}"
+
                             />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

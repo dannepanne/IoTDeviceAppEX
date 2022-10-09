@@ -43,7 +43,7 @@ namespace IotDeviceFunctionEX
                     var twin = await registryManager.GetTwinAsync(device.Id);
                     twin.Properties.Desired["interval"] = 5000;
                     interval = twin.Properties.Desired["interval"];
-                    //deviceName = twin.Properties.Reported["deviceName"].ToString();
+                    var deviceName = twin.Properties.Reported["deviceName"].ToString();
                     await registryManager.UpdateTwinAsync(twin.DeviceId, twin, twin.ETag);
                 }
 
