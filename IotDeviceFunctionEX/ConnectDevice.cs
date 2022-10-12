@@ -29,7 +29,7 @@ namespace IotDeviceFunctionEX
             
             try
             {
-                int interval = 10000;
+                int interval = 5000;
                 var body = JsonConvert.DeserializeObject<HttpDeviceRequest>(await new StreamReader(req.Body).ReadToEndAsync());
                 if (string.IsNullOrEmpty(body.DeviceId))
                     return new BadRequestObjectResult(new HttpDeviceResponse("DeviceId is required"));
@@ -43,7 +43,11 @@ namespace IotDeviceFunctionEX
                     var twin = await registryManager.GetTwinAsync(device.Id);
                     twin.Properties.Desired["interval"] = 5000;
                     interval = twin.Properties.Desired["interval"];
-                    var deviceName = twin.Properties.Reported["deviceName"].ToString();
+                    try
+                    {
+                        var deviceName = twin.Properties.Reported["deviceName"].ToString();
+                    }
+                    catch { }
                     await registryManager.UpdateTwinAsync(twin.DeviceId, twin, twin.ETag);
                 }
 

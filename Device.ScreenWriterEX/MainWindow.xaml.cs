@@ -92,6 +92,7 @@ namespace Device.ScreenWriterEX
             {
                 randomString += GetChar();
             }
+            
             tb_box.Text = randomString;
             return randomString;
         }
@@ -128,7 +129,7 @@ namespace Device.ScreenWriterEX
 
                         if (result.IsSuccessStatusCode || result.StatusCode.ToString() == "Conflict")
                         {
-                            data = JsonConvert.DeserializeObject<DeviceItem>(await result.Content.ReadAsStringAsync()); //gör ett deviceitem
+                            data = JsonConvert.DeserializeObject<DeviceItem>(await result.Content.ReadAsStringAsync()); 
                             using var deviceClient = DeviceClient.CreateFromConnectionString(data.DeviceConnectionString);
 
                             var twin = await deviceClient.GetTwinAsync();
@@ -156,9 +157,6 @@ namespace Device.ScreenWriterEX
         }
 
     }
-    //Twin prop!
-}    //    register!
-        //    kolla conn string - bool connected
-        //    uppdatera twin!
+}   
     
 

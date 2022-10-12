@@ -1,10 +1,13 @@
-﻿using IoTDeviceAppEX.MVVM.Cores;
+﻿using Dapper;
+using IoTDeviceAppEX.MVVM.Cores;
 using IoTDeviceAppEX.MVVM.Models;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,16 +20,7 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         private DispatcherTimer timer;
         private ObservableCollection<DeviceItem> _deviceItems;
 
-        //public ObservableCollection<DeviceItem> deviceItem
-        //{
-        //    get => _deviceItems;
-        //    set 
-        //    { 
-        //        deviceItem = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
+       
 
 
         //knapp ta bort device
@@ -34,19 +28,10 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         //database connection - nuget sql, spara, data i databas mottagen data
 
         private List<DeviceItem> _tempList;
-        private readonly RegistryManager registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
+        private readonly RegistryManager registryManager = RegistryManager.CreateFromConnectionString("HostName=IoTHubSystemDanielEX.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=JF/dHu9W5hWBfvCFrhVB26BVHvjYYSK1ImAflQTkKiQ=");
+        private readonly string dbConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\danne\\source\\repos\\IotDeviceWPF\\IotDeviceWPF\\Data\\device_db.mdf;Integrated Security=True;Connect Timeout=30";
 
-        
-        //private string? _onScreenText;
-        //public string? onScreenText
-        //{
-        //    get => _onScreenText; 
-        //    set 
-        //    { 
-        //        _onScreenText = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+       
 
         public ControlPanelViewModel()
         {
@@ -59,18 +44,6 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
 
         public IEnumerable<DeviceItem> DeviceItems => _deviceItems;
 
-
-        //private IEnumerable<DeviceItem> DeviceItems;
-
-        //public IEnumerable<DeviceItem> _DeviceItems
-        //{
-        //    get => _deviceItems;
-        //    set 
-        //    { 
-        //        DeviceItems = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
 
 
 
@@ -89,57 +62,43 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         {
             await PopulateDeviceItemsAsync();
             await UpdateDeviceItemsAsync();
-           
+            
 
         }
 
-        //public async Task UpdateText()
-        //{
-        //    var result = registryManager.CreateQuery("select * from devices WHERE properties.reported.deviceName = 'ScreenWriter'");
-
-
-        //    foreach (Twin twin in await result.GetNextAsTwinAsync())
-        //    {
-        //        try
-        //        {
-        //            _onScreenText = twin.Properties.Reported["screenWriterText"];
-        //        }
-        //        catch { }
-             
-        //    }
-
-        //    _deviceItems[0].DeviceText = _onScreenText;
-        //}
-
-
         private async Task UpdateDeviceItemsAsync()
-        {   
-
-            _tempList.Clear();
-
-            foreach (var item in _deviceItems)
+        {
+            if (_deviceItems != null)
             {
-                var device = await registryManager.GetDeviceAsync(item.DeviceId);
-                var twin = await registryManager.GetTwinAsync(item.DeviceId);
+                _tempList.Clear();
+                try
+                {
+                    foreach (var item in _deviceItems)
+                    {
+                        var device = await registryManager.GetDeviceAsync(item.DeviceId);
+                        var twin = await registryManager.GetTwinAsync(item.DeviceId);
 
-                DeviceText = twin.Properties.Reported["screenWriterText"].ToString();
+                        DeviceText = twin.Properties.Reported["screenWriterText"].ToString();
 
 
-                if (device == null)
-                    _tempList.Add(item);
+                        if (device == null)
+                            _tempList.Add(item);
+                    }
+                }
+                catch { }
+                foreach (var item in _tempList)
+                {
+                    _deviceItems.Remove(item);
+                }
             }
-
-            foreach (var item in _tempList)
-            {
-                _deviceItems.Remove(item);
-            }
+            
         }
 
        
 
         private async Task PopulateDeviceItemsAsync()
         {
-            using var _registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
+            using var _registryManager = RegistryManager.CreateFromConnectionString("HostName=IoTHubSystemDanielEX.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=JF/dHu9W5hWBfvCFrhVB26BVHvjYYSK1ImAflQTkKiQ=");
             var result = _registryManager.CreateQuery("select * from devices WHERE properties.reported.deviceName = 'ScreenWriter'"); 
 
             if (result.HasMoreResults)
@@ -162,21 +121,20 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
                         catch { }
                         try { device.DeviceText = twin.Properties.Reported["screenWriterText"]; }
                         catch { }
-                        
-                                device.IconActive = "\uf2a1";
-                                device.IconInActive = "\uf6aa";
-                                device.StateActive = "ENABLE";
-                                device.StateInActive = "DISABLE";
+                        try { device.ConnectionString = twin.Properties.Reported["DeviceConnectionString"]; }
+                        catch { }
 
 
                         _deviceItems.Add(device);
                     }
                     else 
                     {
+                        
                         _deviceItems.Clear();
                         _deviceItems.Add(device);
-                        device.DeviceText = twin.Properties.Reported["screenWriterText"];
-                        
+                        DeviceText = twin.Properties.Reported["screenWriterText"].ToString();
+                        device.DeviceText = DeviceText;
+                        await UpdateData(device.DeviceId, device.DeviceName, device.ConnectionString, device.DeviceText);
 
                     }
                 }
@@ -188,19 +146,35 @@ namespace IoTDeviceAppEX.MVVM.ViewModels
         }
 
 
-
-
         private string deviceText;
 
         public string DeviceText
         {
             get { return deviceText; }
-            set 
+            set
             {
                 deviceText = value;
                 OnPropertyChanged(nameof(DeviceText));
             }
         }
 
+        
+
+        public async Task UpdateData(string deviceId, string deviceName, string connectionString, string stringData)
+        {
+            using IDbConnection conn = new SqlConnection(dbConnection);
+
+            await conn.ExecuteAsync("INSERT INTO DataRecieved (dataId, deviceId,deviceName,connectionString,stringData,timeData) VALUES (@DataId, @DeviceId, @DeviceName, @ConnectionString, @StringData, @TimeData)", new 
+            { 
+                DataId = Guid.NewGuid().ToString(),
+                DeviceId = deviceId, 
+                DeviceName = deviceName, 
+                ConnectionString = connectionString, 
+                StringData = stringData, 
+                TimeData =  DateTime.Now.ToString()
+            });
+
+        }
+
     }
-}
+} 

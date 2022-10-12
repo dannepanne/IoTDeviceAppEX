@@ -20,18 +20,12 @@
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <!--knapp för delete samt static resource här-->
-
-
-                <!--<TextBlock Grid.Column="0" Style="{StaticResource tilePanelState}" />-->
-                <!--<CheckBox x:Name="toggleButton" Grid.Column="1" Style="{StaticResource tilePanelToggleButton }" HorizontalAlignment="Right"/>-->
-                
-                    <!--<Button Grid.Row="0" Grid.Column="0" Style="{StaticResource tilePanelDelete}" x:Name="btnRemove" Click Foreground="Red" Content="&#xf54c;"/>-->
-
-                
             </Grid>
+            <StackPanel Grid.Row="0">
+                <Button Grid.Row="0" Grid.Column="0" x:Name="btnRemove" Click="btnRemove_Click" Foreground="Red" HorizontalAlignment="Left" FontFamily="{StaticResource FontAwesome-Regular}" Content="&#xf54c;" FontSize="20" Background="Transparent" BorderBrush="Red" BorderThickness="2" />
+            </StackPanel>
             <StackPanel Grid.Row="1" Margin="10 10 25 10" HorizontalAlignment="Center">
-                <TextBlock Style="{StaticResource tilePanelIcon}" />
+                
                 <TextBlock Style="{StaticResource tilePanelDeviceName}"  />
                 <TextBlock Style="{StaticResource tilePanelDeviceText}"  />
             </StackPanel>

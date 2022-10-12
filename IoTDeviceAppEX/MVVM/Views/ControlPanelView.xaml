@@ -35,10 +35,6 @@
                         <components:TileComponent 
                             DeviceText="{Binding DeviceText}"
                             DeviceName="{Binding DeviceName}" 
-
-                            IconActive="{Binding IconActive}"
-                            IconInActive="{Binding IconInActive}"
-
                             />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

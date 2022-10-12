@@ -26,7 +26,7 @@ namespace IoTDeviceAppEX.Components
 
 
 
-       // private readonly RegistryManager _registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
+
         public TileComponent()
         {
             InitializeComponent();
@@ -50,34 +50,20 @@ namespace IoTDeviceAppEX.Components
 
 
 
-        public static readonly DependencyProperty IconActiveProperty = DependencyProperty.Register("IconActive", typeof(string), typeof(TileComponent));
 
-        public string IconActive
+        private async void btnRemove_Click(object sender, RoutedEventArgs e)
         {
-            get { return (string)GetValue(IconActiveProperty); }
-            set { SetValue(IconActiveProperty, value); }
+            using var _registryManager = RegistryManager.CreateFromConnectionString("HostName=IoThubKyh0907.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=X3wFcDFbyisE8Wu0tYutUrLuv1zyYSo0Qe8kCBFzrQg=");
+            var button = sender as Button;
+            var deviceItem = (DeviceItem)button.DataContext;
+            await _registryManager.RemoveDeviceAsync(deviceItem.DeviceId);
         }
 
-        public static readonly DependencyProperty IconInActiveProperty = DependencyProperty.Register("IconInActive", typeof(string), typeof(TileComponent));
-
-        public string IconInActive
-        {
-            get { return (string)GetValue(IconInActiveProperty); }
-            set { SetValue(IconInActiveProperty, value); }
-        }
-
-        //private async void btnRemove_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var button = sender as Button;
-        //    var deviceItem = (DeviceItem)button.DataContext;
-        //    await _registryManager.RemoveDeviceAsync(deviceItem.DeviceId);
-        //}
 
 
 
 
 
 
-        
     }
 }
